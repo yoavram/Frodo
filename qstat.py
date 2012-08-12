@@ -1,16 +1,17 @@
 import paramiko
-import getpass
 import re
+from ConfigParser import ConfigParser
 
-pattern = re.compile(r"^(?P<jobID>\d+)\s+(?P<prior>[\.\d]+)\s+(?P<name>\w+)\s+(?P<username>\w+)\s+(?P<state>\w+)\s+(?P<date>[\d\w\/]+)\s+(?P<time>[\d:]+)\s+(?P<queue>[@\w\.-]+)\s+(?P<slots>\d+)\s+(?P<jaTaskID>\d+)$", re.M)
+pattern = re.compile(r"^(?P<jobID>\d+)\s+(?P<prior>[\.\d]+)\s+(?P<name>\w+)\s+(?P<username>\w+)\s+(?P<state>\w+)\s+(?P<date>[\d\w\/]+)\s+(?P<time>[\d:]+)\s+(?P<queue>[@\w\.-]*)\s+(?P<slots>\d+)\s+(?P<jaTaskID>[\d\-:]+)$", re.M)
+cfg = ConfigParser()
+cfg.read('frodo.properties')
 
 def exec_qstat():
-    # TODO read from config file
-    host = raw_input("hostname:")
-    port = input("port:")
+    host = cfg.get('sge','host')
+    port = cfg.getint('sge','port')
 
-    username = raw_input("username:")
-    password = getpass.getpass()
+    username = cfg.get('sge','username')
+    password = cfg.get('sge','password')
 
     ssh = paramiko.SSHClient()
     ssh.load_host_keys("hosts")
@@ -33,9 +34,26 @@ def qstat_from_tmp_file():
     fin.close()
     return result
 
-def parse_qstat(qstat):
+def parse_qstat1(qstat):
     fields = qstat[:qstat.find("\n")].split()
-    values = pattern.findall(qstat)
-    return fields,values
+    records = pattern.findall(qstat)
+    return fields,records
 
-fields,values = parse_qstat(qstat_from_tmp_file())
+def parse_qstat2(qstat):
+    fields,records = parse_qstat1(qstat)
+    return records_to_dict(fields, records)
+
+def records_to_dict(fields,records):
+    return [dict(zip(fields,records[i])) for i in range(len(records))]
+
+def summarize1(fields,records):
+    records = records_to_dict(fields,records)
+    return summarize2(records)
+
+def summarize2(records):
+    r = len(filter(lambda x: x['state'] == 'r', records))
+    qw = len(filter(lambda x: x['state'] == 'qw', records))
+    return {'r':r,'qw':qw}    
+    
+if __name__ == '__main__':
+    records = parse_qstat2(qstat_from_tmp_file())
