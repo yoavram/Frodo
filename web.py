@@ -1,11 +1,20 @@
 import qstat
+from ConfigParser import ConfigParser
 import time
 # http://werkzeug.pocoo.org/docs/tutorial/#step-0-a-basic-wsgi-introduction
 from werkzeug.wrappers import Request, Response
+from werkzeug.serving import run_simple
 # http://jinja.pocoo.org/docs/api/
 from jinja2 import Environment, FileSystemLoader
 
-env = Environment(loader=FileSystemLoader('./templates'), auto_reload=True)
+
+
+cfg = ConfigParser()
+cfg.read("frodo.properties")
+host = cfg.get('web','host')
+port = cfg.getint('web','port')
+dev = cfg.getboolean('web','development')    
+env = Environment(loader=FileSystemLoader('./templates'), auto_reload=dev)
 
 @Request.application
 def application(request):
@@ -17,11 +26,4 @@ def application(request):
     return Response(html, mimetype='text/html')
 
 if __name__ == '__main__':
-    from werkzeug.serving import run_simple
-    from ConfigParser import ConfigParser
-    cfg = ConfigParser()
-    cfg.read("frodo.properties")
-    host = cfg.get('web','host')
-    port = cfg.getint('web','port')
-    dev = cfg.getboolean('web','development')
     run_simple(host, port, application, use_debugger=dev, use_reloader=dev)
