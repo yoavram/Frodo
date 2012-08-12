@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block title %}Queue Status{% endblock %}
+{% block body %}
+  <h2>Queue Status:</h2>
+  <p>
+  <ul>
+  <li>running: {{ summary.r }}</li>
+  <li>waiting: {{summary.qw }}</li>
+  </ul>
+  </p>
+  <table border=1 cellpadding=5 cellspacing=5 rules="cols" frame="box" width="70%">
+	<tr>
+	{% for  field in fields %}
+		<th>{{ field }}</th>
+		{% endfor %}
+	</tr>
+	{% for record in records %}
+		{% for  field in record %}
+			<td>{{ field }}</td>
+		{% endfor %}
+	</tr>
+	{% endfor %}
+  </table>
+{% endblock %}
