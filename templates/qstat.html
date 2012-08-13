@@ -1,14 +1,18 @@
 {% extends "layout.html" %}
 {% block title %}Queue Status{% endblock %}
+{% block head %}
+<meta http-equiv="refresh" content="1800" >
+{% endblock %}
 {% block body %}
-  <h2>Queue Status:</h2>
-  <p>
+  <div class="tagline">
   <ul>
-  <li>running: {{ summary.r }}</li>
-  <li>waiting: {{summary.qw }}</li>
+  <li>Running: {{ summary.r }}</li>
+  <li>Waiting: {{summary.qw }}</li>
   </ul>
-  </p>
-  <table border=1 cellpadding=5 cellspacing=5 rules="cols" frame="box" width="70%">
+  </div>
+  <div>
+  <h2>Queue Status:</h2>
+  <table border=1 cellpadding="5" cellspacing="5" rules="cols" frame="box" width="80%">
 	<tr>
 	{% for  field in fields %}
 		<th>{{ field }}</th>
@@ -21,4 +25,5 @@
 	</tr>
 	{% endfor %}
   </table>
+  </div>
 {% endblock %}

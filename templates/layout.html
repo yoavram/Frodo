@@ -1,8 +1,15 @@
 <!doctype html>
-<title>{% block title %}{% endblock %} | frodo</title>
-<link rel=stylesheet href=/style.css type=text/css>
+<html>
+<head>
+<title>{% block title %}{% endblock %} | Frodo</title>
+<link rel=stylesheet href=/static/style.css type=text/css>
+{% block head %}{% endblock %}
+</head>
+<body>
 <div>
   <h1>Frodo</h1>
   <h2>Time: {{ time }}</h2>
   {% block body %}{% endblock %}
 </div>
+</body>
+</html>

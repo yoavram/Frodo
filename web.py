@@ -1,6 +1,7 @@
 import qstat
 from ConfigParser import ConfigParser
 import time
+import os.path
 # http://werkzeug.pocoo.org/docs/tutorial/#step-0-a-basic-wsgi-introduction
 from werkzeug.wrappers import Request, Response
 from werkzeug.serving import run_simple
@@ -26,4 +27,4 @@ def application(request):
     return Response(html, mimetype='text/html')
 
 if __name__ == '__main__':
-    run_simple(host, port, application, use_debugger=dev, use_reloader=dev)
+    run_simple(host, port, application, static_files = {'/static':  os.path.join(os.path.dirname(__file__), 'static')}, use_debugger=dev, use_reloader=dev)
