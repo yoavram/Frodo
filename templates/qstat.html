@@ -4,6 +4,9 @@
 <meta http-equiv="refresh" content="1800" >
 {% endblock %}
 {% block body %}
+  <table width="80%" border="0" cellpadding="5" cellspacing="5">
+  <tr>
+  <td width="30%">
   <div class="tagline">
   <ul>
   <li>Running: {{ summary.r }}</li>
@@ -11,19 +14,50 @@
   <li>Total: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{summary.total }}</li>
   </ul>
   </div>
+  </td>
+  <td>
+  <div>
+	{% if job %}
+		<ul>
+		<li>goup: {{ job['group'] }} </li>
+		<li>queue: {{ job['hard_queue_list'] }} </li>
+		<li>script: {{ job['script_file'] }} </li>
+		</ul>
+	{% endif %}
+  </div>
+  </td>
+   <td>
+  <div>
+	{% if job %}
+		<ul>
+		{% for k,v in job['params'].items() %}
+			<li>{{ k }}: {{ v }}</li>
+		{% endfor %}
+		</ul>
+	{% endif %}
+  </div>
+  </td>
+  </tr>
+  </table>
+  
   <div>
   <h2>Queue Status:</h2>
-  <table border=1 cellpadding="5" cellspacing="5" rules="cols" frame="box" width="80%">
+  <table border="1" cellpadding="5" cellspacing="5" rules="cols" frame="box" width="80%">
 	<tr>
 	{% for  field in fields %}
 		<th>{{ field }}</th>
 		{% endfor %}
 	</tr>
 	{% for record in records %}
-		{% for  field in record %}
+		{% for field in record %}
+			{% if loop.first %}
+			<tr id="{{ field }}">			
+			<td><a href="/qstat?jobID={{ field }}">{{ field }}</a></td>
+			{% else %}
 			<td>{{ field }}</td>
+			{% endif %}
 		{% endfor %}
-	</tr>
+		</tr>
 	{% endfor %}
   </table>
   </div>

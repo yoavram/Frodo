@@ -8,7 +8,7 @@ from werkzeug.serving import run_simple
 # http://jinja.pocoo.org/docs/api/
 from jinja2 import Environment, FileSystemLoader
 
-
+JOB_ID_KEY = 'jobID'
 
 cfg = ConfigParser()
 cfg.read("frodo.properties")
@@ -23,7 +23,11 @@ def application(request):
     fields,records = qstat.parse_qstat1(qstat.exec_qstat())
     summary = qstat.summarize1(fields,records)
     template = env.get_template("qstat.html")
-    html = template.render(time=now, summary=summary, fields=fields, records=records)
+    job_details = None
+    if len(request.args) > 0 and JOB_ID_KEY in request.args:
+        jobID = request.args[JOB_ID_KEY]
+        job_details = qstat.parse_qstat_jobID(qstat.exec_qstat(jobID))
+    html = template.render(time=now, summary=summary, fields=fields, records=records, job=job_details)
     return Response(html, mimetype='text/html')
 
 if __name__ == '__main__':

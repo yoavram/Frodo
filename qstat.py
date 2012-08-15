@@ -8,7 +8,7 @@ ja_task_ID_pattern = re.compile(r'^(\d+)-(\d+):\d+$')
 cfg = ConfigParser()
 cfg.read('frodo.properties')
 
-def exec_qstat():
+def exec_qstat(jobID = None):
     host = cfg.get('sge','host')
     port = cfg.getint('sge','port')
 
@@ -20,8 +20,10 @@ def exec_qstat():
 
     ssh.connect(host, port, username, password)
     print "Connected to",username+"@"+host+":"+str(port)
-
-    stdin, stdout, stderr = ssh.exec_command("qstat")
+    if jobID:
+        stdin, stdout, stderr = ssh.exec_command("qstat -j "+jobID)
+    else:
+        stdin, stdout, stderr = ssh.exec_command("qstat")
     err = stderr.read()
     result = stdout.read()
     ssh.close()
@@ -30,8 +32,8 @@ def exec_qstat():
         print "*** ERROR:",err
     return result
 
-def qstat_from_tmp_file():
-    fin = open("tmp.txt")
+def qstat_from_tmp_file(filename="tmp.txt"):
+    fin = open(filename)
     result = fin.read()
     fin.close()
     return result
@@ -47,6 +49,30 @@ def parse_qstat2(qstat):
 
 def records_to_dict(fields,records):
     return [dict(zip(fields,records[i])) for i in range(len(records))]
+
+def parse_qstat_jobID(qstat):
+    qstat = qstat[qstat.find('\n')+1:]
+    records = [map(str.strip, x.split(':',1)) for x in qstat.split('\n')]
+    records = map(tuple, records)[:-1]
+    records = messy_tuples_to_dict(records)
+    return records
+
+def messy_tuples_to_dict(tuples):
+    dic = {}
+    for tup in tuples:
+        if len(tup)==2:
+            k,v = tup
+            dic[k] = v
+    dic.pop('scheduling info')
+    env_list = dic.pop('env_list').split(',')
+    env_dict = {}
+    for x in env_list:
+        k,v = x.split('=',1)
+        if k.upper() != k:
+            env_dict[k] = v
+    dic['params'] = env_dict
+    return dic
+    
 
 def summarize1(fields,records):
     records = records_to_dict(fields,records)
@@ -66,4 +92,6 @@ def qw_tasks(record):
     return t1-t0+1
     
 if __name__ == '__main__':
-    records = parse_qstat2(qstat_from_tmp_file())
+    #records = parse_qstat2(qstat_from_tmp_file("tmp.txt"))
+    job = parse_qstat_jobID(qstat_from_tmp_file("tmp2.txt"))
+    
