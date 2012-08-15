@@ -27,4 +27,4 @@ def application(request):
     return Response(html, mimetype='text/html')
 
 if __name__ == '__main__':
-    run_simple(host, port, application, static_files = {'/static':  os.path.join(os.path.dirname(__file__), 'static')}, use_debugger=dev, use_reloader=dev)
+    run_simple(host, port, application, static_files = {'/static':  os.path.join(os.path.dirname(__file__), 'static')}, use_debugger=dev, use_reloader=dev, extra_files=['frodo.properties','qstat.py'])
