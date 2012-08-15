@@ -3,6 +3,8 @@ import re
 from ConfigParser import ConfigParser
 
 pattern = re.compile(r"^(?P<jobID>\d+)\s+(?P<prior>[\.\d]+)\s+(?P<name>\w+)\s+(?P<username>\w+)\s+(?P<state>\w+)\s+(?P<date>[\d\w\/]+)\s+(?P<time>[\d:]+)\s+(?P<queue>[@\w\.-]*)\s+(?P<slots>\d+)\s+(?P<jaTaskID>[\d\-:]+)$", re.M)
+ja_task_ID_pattern = re.compile(r'^(\d+)-(\d+):\d+$')
+
 cfg = ConfigParser()
 cfg.read('frodo.properties')
 
@@ -52,8 +54,16 @@ def summarize1(fields,records):
 
 def summarize2(records):
     r = len(filter(lambda x: x['state'] == 'r', records))
-    qw = len(filter(lambda x: x['state'] == 'qw', records))
-    return {'r':r,'qw':qw}    
+    qws = filter(lambda x: x['state'] == 'qw', records)
+    qw = sum( map(qw_tasks, qws) )
+    return {'r':r,'qw':qw, 'total':r+qw}
+
+def qw_tasks(record):
+    ja_task_ID = record['ja-task-ID']
+    m = ja_task_ID_pattern.match(ja_task_ID)
+    t0 = int(m.groups()[0])
+    t1 = int(m.groups()[1])
+    return t1-t0+1
     
 if __name__ == '__main__':
     records = parse_qstat2(qstat_from_tmp_file())
