@@ -53,8 +53,9 @@ def records_to_dict(fields,records):
 def parse_qstat_jobID(qstat):
     qstat = qstat[qstat.find('\n')+1:]
     records = [map(str.strip, x.split(':',1)) for x in qstat.split('\n')]
-    records = map(tuple, records)[:-1]
-    records = messy_tuples_to_dict(records)
+    if len(records)>0:
+        records = map(tuple, records)[:-1]
+        records = messy_tuples_to_dict(records)
     return records
 
 def messy_tuples_to_dict(tuples):
@@ -63,14 +64,16 @@ def messy_tuples_to_dict(tuples):
         if len(tup)==2:
             k,v = tup
             dic[k] = v
-    dic.pop('scheduling info')
-    env_list = dic.pop('env_list').split(',')
-    env_dict = {}
-    for x in env_list:
-        k,v = x.split('=',1)
-        if k.upper() != k:
-            env_dict[k] = v
-    dic['params'] = env_dict
+    if 'scheduling info' in dic:
+        dic.pop('scheduling info')
+    if 'env_list' in dic:
+        env_list = dic.pop('env_list').split(',')
+        env_dict = {}
+        for x in env_list:
+            k,v = x.split('=',1)
+            if k.upper() != k:
+                env_dict[k] = v
+        dic['params'] = env_dict
     return dic
     
 
