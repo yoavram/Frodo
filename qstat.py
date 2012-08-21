@@ -1,20 +1,29 @@
 import paramiko
 import re
 from ConfigParser import ConfigParser
+import getpass
 
 pattern = re.compile(r"^(?P<jobID>\d+)\s+(?P<prior>[\.\d]+)\s+(?P<name>\w+)\s+(?P<username>\w+)\s+(?P<state>\w+)\s+(?P<date>[\d\w\/]+)\s+(?P<time>[\d:]+)\s+(?P<queue>[@\w\.-]*)\s+(?P<slots>\d+)\s+(?P<jaTaskID>[\d\-:]+)$", re.M)
 ja_task_ID_pattern = re.compile(r'^(\d+)-(\d+):\d+$')
 
+def smart_get_option(cfg, section, option):
+    if cfg.has_section(section):
+        if cfg.has_option(section, option):
+            return cfg.get(section, option)
+    return None
+
 cfg = ConfigParser()
 cfg.read('frodo.properties')
-
+host = cfg.get('sge','host')
+port = cfg.getint('sge','port')
+username = smart_get_option(cfg, 'sge', 'username')
+password = smart_get_option(cfg, 'sge', 'password')
+if not username:
+    username = input("Username:")
+if not password:
+    password = getpass.getpass("Password:")
+    
 def exec_qstat(jobID = None):
-    host = cfg.get('sge','host')
-    port = cfg.getint('sge','port')
-
-    username = cfg.get('sge','username')
-    password = cfg.get('sge','password')
-
     ssh = paramiko.SSHClient()
     ssh.load_host_keys("hosts")
 
@@ -96,5 +105,5 @@ def qw_tasks(record):
     
 if __name__ == '__main__':
     #records = parse_qstat2(qstat_from_tmp_file("tmp.txt"))
-    job = parse_qstat_jobID(qstat_from_tmp_file("tmp2.txt"))
-    
+    #job = parse_qstat_jobID(qstat_from_tmp_file("tmp2.txt"))
+    pass
