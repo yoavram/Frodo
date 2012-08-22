@@ -1,64 +1,70 @@
 {% extends "layout.html" %}
 {% block title %}Queue Status{% endblock %}
 {% block head %}
-<meta http-equiv="refresh" content="1800" >
 {% endblock %}
 {% block body %}
-  <table width="80%" border="0" cellpadding="5" cellspacing="5">
-  <tr>
-  <td width="30%">
-  <div class="tagline">
-  <ul>
-  <li>Running: {{ summary.r }}</li>
-  <li>Waiting: &nbsp;{{summary.qw }}</li>
-  <li>Total: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{summary.total }}</li>
-  </ul>
-  </div>
-  </td>
-  <td>
-  <div>
-	{% if job %}
-		<ul>
-		<li>goup: {{ job['group'] }} </li>
-		<li>queue: {{ job['hard_queue_list'] }} </li>
-		<li>script: {{ job['script_file'] }} </li>
-		</ul>
-	{% endif %}
-  </div>
-  </td>
-   <td>
-  <div>
-	{% if job %}
-		<ul>
-		{% for k,v in job['params'].items() %}
-			<li>{{ k }}: {{ v }}</li>
+
+<div class="row-fluid">
+
+<div class="span2 offset1">
+	<div class="row-fluid">
+		<h3>Summary:</h3>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Running</th>
+					<th>Waiting</th>
+					<th>Total</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{ summary.r }}</td>
+					<td>{{ summary.qw }}</td>
+					<td>{{ summary.total }}</td>
+				</tr>
+			 </tbody>
+		</table>
+		
+	</div>
+	<div class="row-fluid">
+		{% if job %}
+		<h3>Job Info:</h3>
+		<table  class="table table-condensed">
+			<tr><td><strong>group</strong></td><td>{{ job['group'] }}</td></tr>
+			<tr><td><strong>queue</strong></td><td>{{ job['hard_queue_list'] }}</td></tr>
+			<tr><td><strong>script</strong></td><td>{{ job['script_file'] }}</td></tr>
+			{% for k,v in job['params'].items() %}
+				<tr><td><strong>{{ k }}</strong></td><td>{{ v }}</td></tr>
+			{% endfor %}
+		</table>
+		{% endif %}
+	</div>
+</div>
+
+<div class="span7 offset1">
+	<h3>Queue Status:</h3>
+	<table class="table table-hover"><!-- border="1" cellpadding="5" cellspacing="5" rules="cols" frame="box" width="80%"-->
+		<thead><tr>
+		{% for  field in fields %}
+			<th>{{ field }}</th>
+			{% endfor %}
+		</tr></thead>
+		<tbody>
+		{% for record in records %}
+			{% for field in record %}
+				{% if loop.first %}
+				<tr id="{{ field }}">			
+				<td><a href="/jobID/{{ field }}">{{ field }}</a></td>
+				{% else %}
+				<td>{{ field }}</td>
+				{% endif %}
+			{% endfor %}
+			</tr>
 		{% endfor %}
-		</ul>
-	{% endif %}
-  </div>
-  </td>
-  </tr>
-  </table>
-  
-  <div>
-  <h2>Queue Status:</h2>
-  <table border="1" cellpadding="5" cellspacing="5" rules="cols" frame="box" width="80%">
-	<tr>
-	{% for  field in fields %}
-		<th>{{ field }}</th>
-		{% endfor %}
-	</tr>
-	{% for record in records %}
-		{% for field in record %}
-			{% if loop.first %}
-			<tr id="{{ field }}">			
-			<td><a href="/qstat?jobID={{ field }}">{{ field }}</a></td>
-			{% else %}
-			<td>{{ field }}</td>
-			{% endif %}
-		{% endfor %}
-		</tr>
-	{% endfor %}
-  </table>
-  </div>
+		</tbody>
+	</table>
+</div>
+
+</div>
 {% endblock %}
