@@ -30,7 +30,7 @@ def exec_qstat(jobID = None):
     ssh.connect(host, port, username, password)
     print "Connected to",username+"@"+host+":"+str(port)
     if jobID:
-        stdin, stdout, stderr = ssh.exec_command("qstat -j "+jobID)
+        stdin, stdout, stderr = ssh.exec_command("qstat -j "+ str(jobID))
     else:
         stdin, stdout, stderr = ssh.exec_command("qstat")
     err = stderr.read()
