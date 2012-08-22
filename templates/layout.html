@@ -11,24 +11,12 @@
 [class*="icon-white"] { background-image: url("/static/glyphicons-halflings-white.png"); } 
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!--meta http-equiv="refresh" content="1800" -->
-<script language="javascript" type="text/javascript" >
-<!--
-function refresh() {
-	location.reload(true);
-}
-var timer;
-function timedRefresh() {
-	timer = setTimeout("refresh();",900000);
-}
-// -->
-</script>
 {% block head %}{% endblock %}
 </head>
-<body onload="timedRefresh();">
+<body>
 
 <div class="row-fluid">
-	<div class="span10 offset1">
+	<div class="span11 offset1">
 		<table>
 			<tr>
 				<td>
@@ -36,21 +24,7 @@ function timedRefresh() {
 				</td>
 				<td>
 					<h1><a href="/">Frodo</a></h1>
-					<h3>{{ time }}<a href="/">
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div class="btn-toolbar">
-						<div class="btn-group">
-							<a class="btn btn-large" href="javascript:refresh()">
-								<i class="icon-refresh"></i>
-							</a>
-							<a class="btn btn-large" href="javascript:timedRefresh();"><i class="icon-play"></i></a>
-							<a class="btn btn-large" href="javascript:clearTimeout(timer);"><i class="icon-pause"></i></a>
-							<a class="btn btn-large" href="#"><i class="icon-off"></i></a>
-						</div>
-					</div>
+					<h3>{{ time }}</h3>
 				</td>
 			</tr>
 		</table>
@@ -60,18 +34,31 @@ function timedRefresh() {
  {% block body %}{% endblock %}
 
  <div class="row-fluid">
-	<div class="span10 offset1" align="right">
-	</br></br>
-	<a href="#">Back to top</a>
-	</br></br>
+	<div class="span3 offset1">
+		<br><br>
+		<br><br>
+		<br><br>
+		<small>
+		© 2012 Frodo. Brought to you by <a href="http://www.yoavram.com" target="_blank">Yoav Ram</a>,
+		licensed under <a href="http://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.
+		<br>
+		Front-end built with <a href="http://twitter.github.com/bootstrap/" target="_blank">Bootstrap</a>, 
+		icons from <a href="http://glyphicons.com/">Glyphicons Free</a>.
+		<br>
+		Back-end built with <a href="http://www.python.org/" target="_blank">Python 2.7</a>, 
+		<a href="http://flask.pocoo.org/" target="_blank">Flask</a>, and 
+		<a href="http://www.lag.net/paramiko/" target="_blank">Paramiko</a>.
+		<br>
+		<br>
+		</small>
 	</div>
-	<div class="span10 offset1" align="middle">
-	<small>
-	Icons from <a href="http://glyphicons.com/">Glyphicons Free</a>, licensed under CC BY 3.0.
-	</small>
+	<div class="span2 offset5" align="right">
+		<br>
+		<a href="#">Back to top</a>
+		<br>
+		<br>
 	</div>
  </div>
- 
 <script src="/static/bootstrap.min.js"></script>
 </body>
 </html>

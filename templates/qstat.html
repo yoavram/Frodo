@@ -1,70 +1,101 @@
 {% extends "layout.html" %}
 {% block title %}Queue Status{% endblock %}
 {% block head %}
+<script language="javascript" type="text/javascript" >
+<!--
+function refresh() {
+	location.reload(true);
+}
+var timer;
+function timedRefresh() {
+	timer = setTimeout("refresh();",900000);
+}
+// -->
+</script>
 {% endblock %}
 {% block body %}
 
 <div class="row-fluid">
+	<div class="span2 offset1">
+		<div class="btn-toolbar">
+			<div class="btn-group">
+				<a class="btn btn-large" href="javascript:refresh()">
+					<i class="icon-refresh"></i>
+				</a>
+				<a class="btn btn-large" href="javascript:timedRefresh();"><i class="icon-play"></i></a>
+				<a class="btn btn-large" href="javascript:clearTimeout(timer);"><i class="icon-pause"></i></a>
+				<a class="btn btn-large" href="#"><i class="icon-off"></i></a>
+			</div>
+		</div>
+	</div>
+</div>
 
-<div class="span2 offset1">
-	<div class="row-fluid">
-		<h3>Summary:</h3>
-		<table class="table">
+<div class="row-fluid">
+	<div class="span2 offset1">
+		<div class="row-fluid">
+			<h3>Summary:</h3>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Running</th>
+						<th>Waiting</th>
+						<th>Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>{{ summary.r }}</td>
+						<td>{{ summary.qw }}</td>
+						<td>{{ summary.total }}</td>
+					</tr>
+				 </tbody>
+			</table>
+			
+		</div>
+		<div class="row-fluid">
+			{% if job %}
+			<h3>Job Info:</h3>
+			<table  class="table table-condensed">
+				<tr><td><strong>group</strong></td><td>{{ job['group'] }}</td></tr>
+				<tr><td><strong>queue</strong></td><td>{{ job['hard_queue_list'] }}</td></tr>
+				<tr><td><strong>script</strong></td><td>{{ job['script_file'] }}</td></tr>
+				{% for k,v in job['params'].items() %}
+					<tr><td><strong>{{ k }}</strong></td><td>{{ v }}</td></tr>
+				{% endfor %}
+			</table>
+			{% endif %}
+		</div>
+	</div>
+
+	<div class="span8">
+		<h3>Queue Status:</h3>
+		<table class="table table-hover">
 			<thead>
 				<tr>
-					<th>Running</th>
-					<th>Waiting</th>
-					<th>Total</th>
+					{% for  field in fields %}
+						<th>{{ field }}</th>
+					{% endfor %}
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>{{ summary.r }}</td>
-					<td>{{ summary.qw }}</td>
-					<td>{{ summary.total }}</td>
-				</tr>
-			 </tbody>
-		</table>
-		
-	</div>
-	<div class="row-fluid">
-		{% if job %}
-		<h3>Job Info:</h3>
-		<table  class="table table-condensed">
-			<tr><td><strong>group</strong></td><td>{{ job['group'] }}</td></tr>
-			<tr><td><strong>queue</strong></td><td>{{ job['hard_queue_list'] }}</td></tr>
-			<tr><td><strong>script</strong></td><td>{{ job['script_file'] }}</td></tr>
-			{% for k,v in job['params'].items() %}
-				<tr><td><strong>{{ k }}</strong></td><td>{{ v }}</td></tr>
-			{% endfor %}
-		</table>
-		{% endif %}
-	</div>
-</div>
-
-<div class="span7 offset1">
-	<h3>Queue Status:</h3>
-	<table class="table table-hover"><!-- border="1" cellpadding="5" cellspacing="5" rules="cols" frame="box" width="80%"-->
-		<thead><tr>
-		{% for  field in fields %}
-			<th>{{ field }}</th>
-			{% endfor %}
-		</tr></thead>
-		<tbody>
-		{% for record in records %}
-			{% for field in record %}
-				{% if loop.first %}
+			{% for record in records %}
+				{% for field in record %}
+					{% if loop.first %}
 				<tr id="{{ field }}">			
-				<td><a href="/jobID/{{ field }}">{{ field }}</a></td>
-				{% else %}
-				<td>{{ field }}</td>
-				{% endif %}
+					<td><a href="/jobID/{{ field }}">{{ field }}</a></td>
+					{% else %}
+					<td>{{ field }}</td>
+					{% endif %}
+				{% endfor %}
+				</tr>
 			{% endfor %}
-			</tr>
-		{% endfor %}
-		</tbody>
-	</table>
+			</tbody>
+		</table>
+	</div>
 </div>
-
-</div>
+<script language="javascript" type="text/javascript" >
+<!--
+timedRefresh();
+//-->
+</script>
 {% endblock %}
