@@ -19,7 +19,7 @@ port = cfg.getint('sge','port')
 username = smart_get_option(cfg, 'sge', 'username')
 password = smart_get_option(cfg, 'sge', 'password')
 if not username:
-    username = input("Username:")
+    username = raw_input("Username:")
 if not password:
     password = getpass.getpass("Password:")
     
