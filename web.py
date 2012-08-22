@@ -15,6 +15,7 @@ dev = cfg.getboolean('web','development')
 
 app = Flask(__name__)
 app.debug = dev
+# http://packages.python.org/Flask-Login/#flaskext.login.LoginManager
 #login_manager = login.LoginManager()
 #login_manager.setup_app(app)
 
@@ -22,10 +23,10 @@ app.debug = dev
 @app.route('/jobID/<int:jobID>')
 def root_q(jobID = None):
     now = time.asctime()
-    fields,records = qstat.parse_qstat1(qstat.qstat_from_tmp_file())
+    fields,records = qstat.parse_qstat1(qstat.exec_qstat())
     summary = qstat.summarize1(fields,records)
     if jobID:
-        job_details = qstat.parse_qstat_jobID(qstat.qstat_from_tmp_file("tmp2.txt"))
+        job_details = qstat.parse_qstat_jobID(qstat.exec_qstat(jobID))
     else:
         job_details = None
     return render_template("qstat.html", time=now, summary=summary, fields=fields, records=records, job=job_details)
@@ -33,7 +34,6 @@ def root_q(jobID = None):
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     error = None
-    # http://packages.python.org/Flask-Login/#flaskext.login.LoginManager
     #if request.method == 'POST':
         #if valid_login(request.form['username'],
         #               request.form['password']):
