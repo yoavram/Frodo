@@ -58,7 +58,11 @@ function activateBtn(btnName) {
 	i.removeClass().addClass(clz+" icon-white");
 }
 
-timedRefresh();
+$(document).ready(function () {
+	$("[rel=tooltip]").tooltip();
+	timedRefresh();
+});
+
 // -->
 </script>
 {% endblock %}
@@ -69,18 +73,18 @@ timedRefresh();
 		<div class="btn-toolbar">
 			<div id='control-toolbal' class="btn-group">
 				<a id="refreshAnchor" class="btn btn-large" href="javascript:clickedRefresh()">
-					<i id="refreshIcon" class="icon-refresh"></i>
+					<i id="refreshIcon" class="icon-refresh" rel="tooltip" title="refresh once"></i>
 				</a>
 				<a id="playAnchor" class="btn btn-large btn-info" href="javascript:clickedPlay();">
-					<i id="playIcon" class="icon-play icon-white"></i>
+					<i id="playIcon" class="icon-play icon-white" rel="tooltip" title="start refresh loop"></i>
 				</a>
 				<a id="pauseAnchor" class="btn btn-large" href="javascript:clickedPause()">
-					<i id="pauseIcon" class="icon-pause"></i>
+					<i id="pauseIcon" class="icon-pause" rel="tooltip" title="stop refresh loop"></i>
 				</a>
-				<a id="offAnchor" class="btn btn-large" href="javascript:clickedOff()">
-					<i id="offIcon" class="icon-off"></i>
-				</a>
-			</div>
+				<a id="offAnchor" class="btn btn-large" href="/logout">
+					<i id="offIcon" class="icon-off" rel="tooltip" title="logout"></i>
+				</a>				
+			</div>			
 		</div>
 	</div>
 </div>
@@ -88,7 +92,10 @@ timedRefresh();
 <div class="row-fluid">
 	<div class="span2 offset1">
 		<div class="row-fluid">
-			<h3>Summary:</h3>
+			<h3>Summary</h3>
+			<h4>User</h4>
+			<p class="lead" align="center">{{ username }}</p>
+			<h4>Jobs</h4>	
 			<table class="table">
 				<thead>
 					<tr>
@@ -109,7 +116,7 @@ timedRefresh();
 		</div>
 		<div class="row-fluid">
 			{% if job %}
-			<h3>Job Info:</h3>
+			<h3>Job Info</h3>
 			<table  class="table table-condensed">
 				<tr><td><strong>group</strong></td><td>{{ job['group'] }}</td></tr>
 				<tr><td><strong>queue</strong></td><td>{{ job['hard_queue_list'] }}</td></tr>
@@ -123,7 +130,7 @@ timedRefresh();
 	</div>
 
 	<div class="span8">
-		<h3>Queue Status:</h3>
+		<h3>Queue Status</h3>
 		<table class="table table-hover">
 			<thead>
 				<tr>
