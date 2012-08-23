@@ -57,6 +57,8 @@ function activateBtn(btnName) {
 	clz = i.attr("class").split(' ')[0];
 	i.removeClass().addClass(clz+" icon-white");
 }
+
+timedRefresh();
 // -->
 </script>
 {% endblock %}
@@ -69,8 +71,8 @@ function activateBtn(btnName) {
 				<a id="refreshAnchor" class="btn btn-large" href="javascript:clickedRefresh()">
 					<i id="refreshIcon" class="icon-refresh"></i>
 				</a>
-				<a id="playAnchor" class="btn btn-large" href="javascript:clickedPlay();">
-					<i id="playIcon" class="icon-play"></i>
+				<a id="playAnchor" class="btn btn-large btn-info" href="javascript:clickedPlay();">
+					<i id="playIcon" class="icon-play icon-white"></i>
 				</a>
 				<a id="pauseAnchor" class="btn btn-large" href="javascript:clickedPause()">
 					<i id="pauseIcon" class="icon-pause"></i>
@@ -154,10 +156,4 @@ function activateBtn(btnName) {
 		<br>
 	</div>
 </div>
-	
-<script language="javascript" type="text/javascript" >
-<!--
-clickedPlay();
-//-->
-</script>
 {% endblock %}
