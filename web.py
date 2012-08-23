@@ -48,4 +48,4 @@ def logout():
 
 if __name__ == '__main__':
     app.secret_key = cfg.get('web','secret')
-    app.run()
+    app.run(host=host, port=port)
