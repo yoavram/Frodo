@@ -47,5 +47,5 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+    app.secret_key = cfg.get('web','secret')
     app.run()
