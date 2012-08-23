@@ -3,12 +3,59 @@
 {% block head %}
 <script language="javascript" type="text/javascript" >
 <!--
+var timer;
+
 function refresh() {
 	location.reload(true);
 }
-var timer;
+
 function timedRefresh() {
 	timer = setTimeout("refresh();",900000);
+}
+
+function clickedRefresh() {
+	clearAllBtns();
+	activateBtn('refresh');
+	refresh();
+}
+
+function clickedPlay() {
+	clearAllBtns();
+	activateBtn('play');
+	timedRefresh();
+}
+
+function clickedPause() {
+	clearAllBtns();
+	activateBtn('pause');
+	clearTimeout(timer);
+}
+
+function clickedOff() {
+	clearAllBtns();
+	activateBtn('off');
+}
+
+function clearAllBtns() {
+	clearBtn('refresh'); 
+	clearBtn('play');
+	clearBtn('pause'); 
+	clearBtn('off');
+}
+function clearBtn(btnName) {
+	a = $('#'+btnName+"Anchor");
+	a.removeClass().addClass("btn btn-large");
+	i = $('#'+btnName+"Icon");
+	clz = i.attr("class").split(' ')[0];
+	i.removeClass().addClass(clz);
+}
+
+function activateBtn(btnName) {
+	a = $('#'+btnName+"Anchor");
+	a.removeClass().addClass("btn btn-large btn-info");
+	i = $('#'+btnName+"Icon");
+	clz = i.attr("class").split(' ')[0];
+	i.removeClass().addClass(clz+" icon-white");
 }
 // -->
 </script>
@@ -18,13 +65,19 @@ function timedRefresh() {
 <div class="row-fluid">
 	<div class="span2 offset1">
 		<div class="btn-toolbar">
-			<div class="btn-group">
-				<a class="btn btn-large" href="javascript:refresh()">
-					<i class="icon-refresh"></i>
+			<div id='control-toolbal' class="btn-group">
+				<a id="refreshAnchor" class="btn btn-large" href="javascript:clickedRefresh()">
+					<i id="refreshIcon" class="icon-refresh"></i>
 				</a>
-				<a class="btn btn-large" href="javascript:timedRefresh();"><i class="icon-play"></i></a>
-				<a class="btn btn-large" href="javascript:clearTimeout(timer);"><i class="icon-pause"></i></a>
-				<a class="btn btn-large" href="#"><i class="icon-off"></i></a>
+				<a id="playAnchor" class="btn btn-large btn-info" href="javascript:clickedPlay();">
+					<i id="playIcon" class="icon-play icon-white"></i>
+				</a>
+				<a id="pauseAnchor" class="btn btn-large" href="javascript:clickedPause()">
+					<i id="pauseIcon" class="icon-pause"></i>
+				</a>
+				<a id="offAnchor" class="btn btn-large" href="javascript:clickedOff()">
+					<i id="offIcon" class="icon-off"></i>
+				</a>
 			</div>
 		</div>
 	</div>
