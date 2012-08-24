@@ -16,14 +16,16 @@ cfg.read('frodo.properties')
 host = cfg.get('sge','host')
 port = cfg.getint('sge','port')
     
-def exec_qstat(username, password, jobID = None):
+def exec_qstat(username, password, jobID = None, qstat_username=None):
     ssh = paramiko.SSHClient()
     ssh.load_host_keys("hosts")
     ssh.connect(host, port, username, password)
+    query = "qstat"
     if jobID:
-        stdin, stdout, stderr = ssh.exec_command("qstat -j "+ str(jobID))
-    else:
-        stdin, stdout, stderr = ssh.exec_command("qstat")
+        query += " -j " + str(jobID)
+    if qstat_username:
+        query += " -u " + username
+    stdin, stdout, stderr = ssh.exec_command(query)
     err = stderr.read()
     result = stdout.read()
     ssh.close()
@@ -41,7 +43,7 @@ def qstat_from_tmp_file(filename="tmp.txt"):
 def parse_qstat1(qstat):
     fields = qstat[:qstat.find("\n")].split()
     records = pattern.findall(qstat)
-    return fields,records
+    return {'fields':fields, 'records':records}
 
 def parse_qstat2(qstat):
     fields,records = parse_qstat1(qstat)
