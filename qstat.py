@@ -2,7 +2,7 @@ import paramiko
 import re
 from ConfigParser import ConfigParser
 
-pattern = re.compile(r"^(?P<jobID>\d+)\s+(?P<prior>[\.\d]+)\s+(?P<name>\w+)\s+(?P<username>\w+)\s+(?P<state>\w+)\s+(?P<date>[\d\w\/]+)\s+(?P<time>[\d:]+)\s+(?P<queue>[@\w\.-]*)\s+(?P<slots>\d+)\s+(?P<jaTaskID>[\d\-:]+)$", re.M)
+pattern = re.compile(r"^(?P<jobID>\d+)\s+(?P<prior>[\.\d]+)\s+(?P<name>\w+)\s+(?P<username>\w+)\s+(?P<state>\w+)\s+(?P<date>[\d\w\/]+)\s+(?P<time>[\d:]+)\s+(?P<queue>[@\w\.-]*)\s+(?P<slots>\d+)\s*(?P<jaTaskID>[\d\-:]*)$", re.M)
 ja_task_ID_pattern = re.compile(r'^(\d+)-(\d+):\d+$')
 
 def smart_get_option(cfg, section, option):
@@ -24,7 +24,8 @@ def exec_qstat(username, password, jobID = None, qstat_username=None):
     if jobID:
         query += " -j " + str(jobID)
     if qstat_username:
-        query += " -u " + username
+        query += " -u " + qstat_username
+    print "query:",query
     stdin, stdout, stderr = ssh.exec_command(query)
     err = stderr.read()
     result = stdout.read()
@@ -92,9 +93,12 @@ def summarize2(records):
 def qw_tasks(record):
     ja_task_ID = record['ja-task-ID']
     m = ja_task_ID_pattern.match(ja_task_ID)
-    t0 = int(m.groups()[0])
-    t1 = int(m.groups()[1])
-    return t1-t0+1
+    if m:
+        t0 = int(m.groups()[0])
+        t1 = int(m.groups()[1])
+        return t1-t0+1
+    else:
+        return 1
     
 if __name__ == '__main__':
     #records = parse_qstat2(qstat_from_tmp_file("tmp.txt"))

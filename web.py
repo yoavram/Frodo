@@ -21,14 +21,15 @@ def index():
 
 @app.route('/')
 @app.route('/qstat')
-@app.route('/jobID/<int:jobID>')
-def index(jobID = None):
+@app.route('/qstat/jobID/<int:jobID>')
+@app.route('/qstat/username/<qusername>')
+def index(jobID = None, qusername=None):
     if 'username' not in session:
         return redirect(url_for('login'))
     username = session['username']
     password = session['password']
     now = time.asctime()
-    result = qstat.parse_qstat1(qstat.exec_qstat(username, password))
+    result = qstat.parse_qstat1(qstat.exec_qstat(username, password, qstat_username=qusername))
     fields = result['fields']
     records = result['records']
     summary = qstat.summarize1(fields,records)
@@ -37,6 +38,7 @@ def index(jobID = None):
     else:
         job_details = None
     return render_template("qstat.html", username=username, time=now, summary=summary, fields=fields, records=records, job=job_details)
+
 @app.route('/qstat/json')
 def qstat_json():
     if 'username' not in session:

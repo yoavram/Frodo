@@ -144,7 +144,7 @@ $(document).ready(function () {
 				{% for field in record %}
 					{% if loop.first %}
 				<tr id="{{ field }}">			
-					<td><a href="/jobID/{{ field }}">{{ field }}</a></td>
+					<td><a href="/qstat/jobID/{{ field }}">{{ field }}</a></td>
 					{% else %}
 					<td>{{ field }}</td>
 					{% endif %}
