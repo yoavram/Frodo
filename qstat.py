@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import paramiko
 import re
 from ConfigParser import ConfigParser
@@ -12,13 +13,13 @@ def smart_get_option(cfg, section, option):
     return None
 
 cfg = ConfigParser()
-cfg.read('frodo.properties')
+cfg.read('/home/user/workspace/frodo/frodo.properties')
 host = cfg.get('sge','host')
 port = cfg.getint('sge','port')
     
 def exec_qstat(username, password, jobID = None, qstat_username=None):
     ssh = paramiko.SSHClient()
-    ssh.load_host_keys("hosts")
+    ssh.load_host_keys("/home/user/workspace/frodo/hosts")
     ssh.connect(host, port, username, password)
     query = "qstat"
     if jobID:
