@@ -2,7 +2,7 @@ import paramiko
 import re
 from ConfigParser import ConfigParser
 
-pattern = re.compile(r"^(?P<jobID>\d+)\s+(?P<prior>[\.\d]+)\s+(?P<name>\w+)\s+(?P<username>\w+)\s+(?P<state>\w+)\s+(?P<date>[\d\w\/]+)\s+(?P<time>[\d:]+)\s+(?P<queue>[@\w\.-]*)\s+(?P<slots>\d+)\s*(?P<jaTaskID>[\d\-:]*)$", re.M)
+pattern = re.compile(r"^(?P<jobID>\d+)\s+(?P<prior>[\.\d]+)\s+(?P<name>\w+)\s+(?P<username>\w+)\s+(?P<state>\w+)\s+(?P<date>[\d\w\/]+)\s+(?P<time>[\d:]+)\s+(?P<queue>[@\w\.-]*)\s+(?P<slots>\d+)\s+(?P<jaTaskID>[\d\-:]*)$", re.M)
 ja_task_ID_pattern = re.compile(r'^(\d+)-(\d+):\d+$')
 
 def smart_get_option(cfg, section, option):
@@ -25,7 +25,7 @@ def exec_qstat(username, password, jobID = None, qstat_username=None):
         query += " -j " + str(jobID)
     if qstat_username:
         query += " -u " + qstat_username
-    print "query:",query
+    #print "query:",query
     stdin, stdout, stderr = ssh.exec_command(query)
     err = stderr.read()
     result = stdout.read()
@@ -43,7 +43,13 @@ def qstat_from_tmp_file(filename="tmp.txt"):
 
 def parse_qstat1(qstat):
     fields = qstat[:qstat.find("\n")].split()
+    ind = [fields.index('prior'), fields.index('slots')]
+    ind.sort(reverse=True)
+    for i in ind: fields.pop(i)
     records = pattern.findall(qstat)
+    for j in range(len(records)):
+        records[j] = list(records[j])
+        for i in ind: records[j].pop(i)
     return {'fields':fields, 'records':records}
 
 def parse_qstat2(qstat):
