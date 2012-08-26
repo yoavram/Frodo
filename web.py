@@ -8,12 +8,10 @@ JOB_ID_KEY = 'jobID'
 
 cfg = ConfigParser()
 cfg.read("frodo.properties")
-host = cfg.get('web','host')
-port = cfg.getint('web','port')
-dev = cfg.getboolean('web','development')
 
 app = Flask(__name__)
-app.debug = dev
+app.debug = cfg.getboolean('web','development')
+app.secret_key = cfg.get('web','secret')
 
 @app.route('/')
 def index():
@@ -78,5 +76,6 @@ def logout():
     return redirect(url_for('login'))
 
 if __name__ == '__main__':
-    app.secret_key = cfg.get('web','secret')
+    host = cfg.get('web','host')
+    port = cfg.getint('web','port')
     app.run(host=host, port=port)
