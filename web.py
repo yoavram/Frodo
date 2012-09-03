@@ -1,5 +1,8 @@
 #!/usr/bin/python
-from flask import Flask, render_template, request, session, redirect, url_for, jsonify
+# Frodo - A web app for monitoring SGE cluster status: https://bitbucket.org/yoavram/frodo
+# Copyright (c) 2012 by Yoav Ram.
+# This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
+# To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 import time
 import common
 import qstat

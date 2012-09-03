@@ -1,4 +1,8 @@
 #!/usr/bin/python
+# Frodo - A web app for monitoring SGE cluster status: https://bitbucket.org/yoavram/frodo
+# Copyright (c) 2012 by Yoav Ram.
+# This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
+# To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.
 import paramiko
 import re
 import common
