@@ -3,6 +3,7 @@
 # Copyright (c) 2012 by Yoav Ram.
 # This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.from flask import Flask, render_template, request, session, redirect, url_for, jsonify
+from flask import Flask, render_template, request, session, redirect, url_for, jsonify
 import time
 import common
 import qstat
@@ -17,13 +18,12 @@ app.secret_key = cfg.get('web','secret')
 
 @app.route('/')
 def index():
-    return redirect(url_for('qstat'))
+    return redirect(url_for('qstat_html'))
 
-@app.route('/')
 @app.route('/qstat')
 @app.route('/qstat/jobID/<int:jobID>')
 @app.route('/qstat/username/<qusername>')
-def index(jobID = None, qusername=None):
+def qstat_html(jobID = None, qusername=None):
     if 'username' not in session:
         return redirect(url_for('login'))
     username = session['username']
@@ -67,7 +67,7 @@ def login():
     if request.method == 'POST':
         session['username'] = request.form['username']
         session['password'] = request.form['password']
-        return redirect(url_for("index"))
+        return redirect(url_for('index'))
     return render_template('login.html')
 
 @app.route('/logout')
