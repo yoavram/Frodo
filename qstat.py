@@ -1,9 +1,9 @@
+#!/usr/bin/python
 import paramiko
 import re
 from ConfigParser import ConfigParser
-import getpass
 
-pattern = re.compile(r"^(?P<jobID>\d+)\s+(?P<prior>[\.\d]+)\s+(?P<name>\w+)\s+(?P<username>\w+)\s+(?P<state>\w+)\s+(?P<date>[\d\w\/]+)\s+(?P<time>[\d:]+)\s+(?P<queue>[@\w\.-]*)\s+(?P<slots>\d+)\s+(?P<jaTaskID>[\d\-:]+)$", re.M)
+pattern = re.compile(r"^(?P<jobID>\d+)\s+(?P<prior>[\.\d]+)\s+(?P<name>\w+)\s+(?P<username>\w+)\s+(?P<state>\w+)\s+(?P<date>[\d\w\/]+)\s+(?P<time>[\d:]+)\s+(?P<queue>[@\w\.-]*)\s+(?P<slots>\d+)\s+(?P<jaTaskID>[\d\-:]*)$", re.M)
 ja_task_ID_pattern = re.compile(r'^(\d+)-(\d+):\d+$')
 
 def smart_get_option(cfg, section, option):
@@ -13,26 +13,21 @@ def smart_get_option(cfg, section, option):
     return None
 
 cfg = ConfigParser()
-cfg.read('frodo.properties')
+cfg.read('/home/user/workspace/frodo/frodo.properties')
 host = cfg.get('sge','host')
 port = cfg.getint('sge','port')
-username = smart_get_option(cfg, 'sge', 'username')
-password = smart_get_option(cfg, 'sge', 'password')
-if not username:
-    username = raw_input("Username:")
-if not password:
-    password = getpass.getpass("Password:")
     
-def exec_qstat(jobID = None):
+def exec_qstat(username, password, jobID = None, qstat_username=None):
     ssh = paramiko.SSHClient()
-    ssh.load_host_keys("hosts")
-
+    ssh.load_host_keys("/home/user/workspace/frodo/hosts")
     ssh.connect(host, port, username, password)
-    print "Connected to",username+"@"+host+":"+str(port)
+    query = "qstat"
     if jobID:
-        stdin, stdout, stderr = ssh.exec_command("qstat -j "+ str(jobID))
-    else:
-        stdin, stdout, stderr = ssh.exec_command("qstat")
+        query += " -j " + str(jobID)
+    if qstat_username:
+        query += " -u " + qstat_username
+    #print "query:",query
+    stdin, stdout, stderr = ssh.exec_command(query)
     err = stderr.read()
     result = stdout.read()
     ssh.close()
@@ -49,8 +44,14 @@ def qstat_from_tmp_file(filename="tmp.txt"):
 
 def parse_qstat1(qstat):
     fields = qstat[:qstat.find("\n")].split()
+    ind = [fields.index('prior'), fields.index('slots')]
+    ind.sort(reverse=True)
+    for i in ind: fields.pop(i)
     records = pattern.findall(qstat)
-    return fields,records
+    for j in range(len(records)):
+        records[j] = list(records[j])
+        for i in ind: records[j].pop(i)
+    return {'fields':fields, 'records':records}
 
 def parse_qstat2(qstat):
     fields,records = parse_qstat1(qstat)
@@ -99,9 +100,12 @@ def summarize2(records):
 def qw_tasks(record):
     ja_task_ID = record['ja-task-ID']
     m = ja_task_ID_pattern.match(ja_task_ID)
-    t0 = int(m.groups()[0])
-    t1 = int(m.groups()[1])
-    return t1-t0+1
+    if m:
+        t0 = int(m.groups()[0])
+        t1 = int(m.groups()[1])
+        return t1-t0+1
+    else:
+        return 1
     
 if __name__ == '__main__':
     #records = parse_qstat2(qstat_from_tmp_file("tmp.txt"))

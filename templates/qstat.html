@@ -3,13 +3,66 @@
 {% block head %}
 <script language="javascript" type="text/javascript" >
 <!--
+var timer;
+
 function refresh() {
 	location.reload(true);
 }
-var timer;
+
 function timedRefresh() {
 	timer = setTimeout("refresh();",900000);
 }
+
+function clickedRefresh() {
+	clearAllBtns();
+	activateBtn('refresh');
+	refresh();
+}
+
+function clickedPlay() {
+	clearAllBtns();
+	activateBtn('play');
+	timedRefresh();
+}
+
+function clickedPause() {
+	clearAllBtns();
+	activateBtn('pause');
+	clearTimeout(timer);
+}
+
+function clickedOff() {
+	clearAllBtns();
+	activateBtn('off');
+}
+
+function clearAllBtns() {
+	clearBtn('refresh'); 
+	clearBtn('play');
+	clearBtn('pause'); 
+	clearBtn('off');
+}
+function clearBtn(btnName) {
+	a = $('#'+btnName+"Anchor");
+	a.removeClass().addClass("btn btn-large");
+	i = $('#'+btnName+"Icon");
+	clz = i.attr("class").split(' ')[0];
+	i.removeClass().addClass(clz);
+}
+
+function activateBtn(btnName) {
+	a = $('#'+btnName+"Anchor");
+	a.removeClass().addClass("btn btn-large btn-info");
+	i = $('#'+btnName+"Icon");
+	clz = i.attr("class").split(' ')[0];
+	i.removeClass().addClass(clz+" icon-white");
+}
+
+$(document).ready(function () {
+	$("[rel=tooltip]").tooltip();
+	timedRefresh();
+});
+
 // -->
 </script>
 {% endblock %}
@@ -18,14 +71,20 @@ function timedRefresh() {
 <div class="row-fluid">
 	<div class="span2 offset1">
 		<div class="btn-toolbar">
-			<div class="btn-group">
-				<a class="btn btn-large" href="javascript:refresh()">
-					<i class="icon-refresh"></i>
+			<div id='control-toolbal' class="btn-group">
+				<a id="refreshAnchor" class="btn btn-large" href="javascript:clickedRefresh()">
+					<i id="refreshIcon" class="icon-refresh" rel="tooltip" title="refresh once"></i>
 				</a>
-				<a class="btn btn-large" href="javascript:timedRefresh();"><i class="icon-play"></i></a>
-				<a class="btn btn-large" href="javascript:clearTimeout(timer);"><i class="icon-pause"></i></a>
-				<a class="btn btn-large" href="#"><i class="icon-off"></i></a>
-			</div>
+				<a id="playAnchor" class="btn btn-large btn-info" href="javascript:clickedPlay();">
+					<i id="playIcon" class="icon-play icon-white" rel="tooltip" title="start refresh loop"></i>
+				</a>
+				<a id="pauseAnchor" class="btn btn-large" href="javascript:clickedPause()">
+					<i id="pauseIcon" class="icon-pause" rel="tooltip" title="stop refresh loop"></i>
+				</a>
+				<a id="offAnchor" class="btn btn-large" href="/logout">
+					<i id="offIcon" class="icon-off" rel="tooltip" title="logout"></i>
+				</a>				
+			</div>			
 		</div>
 	</div>
 </div>
@@ -33,7 +92,10 @@ function timedRefresh() {
 <div class="row-fluid">
 	<div class="span2 offset1">
 		<div class="row-fluid">
-			<h3>Summary:</h3>
+			<h3>Summary</h3>
+			<h4>User</h4>
+			<p class="lead" align="center">{{ username }}</p>
+			<h4>Jobs</h4>	
 			<table class="table">
 				<thead>
 					<tr>
@@ -54,7 +116,7 @@ function timedRefresh() {
 		</div>
 		<div class="row-fluid">
 			{% if job %}
-			<h3>Job Info:</h3>
+			<h3>Job Info</h3>
 			<table  class="table table-condensed">
 				<tr><td><strong>group</strong></td><td>{{ job['group'] }}</td></tr>
 				<tr><td><strong>queue</strong></td><td>{{ job['hard_queue_list'] }}</td></tr>
@@ -68,7 +130,7 @@ function timedRefresh() {
 	</div>
 
 	<div class="span8">
-		<h3>Queue Status:</h3>
+		<h3>Queue Status</h3>
 		<table class="table table-hover">
 			<thead>
 				<tr>
@@ -82,7 +144,7 @@ function timedRefresh() {
 				{% for field in record %}
 					{% if loop.first %}
 				<tr id="{{ field }}">			
-					<td><a href="/jobID/{{ field }}">{{ field }}</a></td>
+					<td><a href="/qstat/jobID/{{ field }}">{{ field }}</a></td>
 					{% else %}
 					<td>{{ field }}</td>
 					{% endif %}
@@ -93,9 +155,12 @@ function timedRefresh() {
 		</table>
 	</div>
 </div>
-<script language="javascript" type="text/javascript" >
-<!--
-timedRefresh();
-//-->
-</script>
+<div class="row-fluid">
+	<div class="span2 offset9" align="right">
+		<br>
+		<a href="#">Back to top</a>
+		<br>
+		<br>
+	</div>
+</div>
 {% endblock %}
