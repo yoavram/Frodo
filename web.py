@@ -1,14 +1,12 @@
 #!/usr/bin/python
 from flask import Flask, render_template, request, session, redirect, url_for, jsonify
-
-from ConfigParser import ConfigParser
-import qstat
 import time
+import common
+import qstat
 
 JOB_ID_KEY = 'jobID'
 
-cfg = ConfigParser()
-cfg.read("/home/user/workspace/frodo/frodo.properties")
+cfg = common.configuration()
 
 app = Flask(__name__)
 app.debug = cfg.getboolean('web','development')

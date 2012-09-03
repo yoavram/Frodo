@@ -1,7 +1,7 @@
 #!/usr/bin/python
 import paramiko
 import re
-from ConfigParser import ConfigParser
+import common
 
 pattern = re.compile(r"^(?P<jobID>\d+)\s+(?P<prior>[\.\d]+)\s+(?P<name>\w+)\s+(?P<username>\w+)\s+(?P<state>\w+)\s+(?P<date>[\d\w\/]+)\s+(?P<time>[\d:]+)\s+(?P<queue>[@\w\.-]*)\s+(?P<slots>\d+)\s+(?P<jaTaskID>[\d\-:]*)$", re.M)
 ja_task_ID_pattern = re.compile(r'^(\d+)-(\d+):\d+$')
@@ -12,14 +12,13 @@ def smart_get_option(cfg, section, option):
             return cfg.get(section, option)
     return None
 
-cfg = ConfigParser()
-cfg.read('/home/user/workspace/frodo/frodo.properties')
+cfg = common.configuration()
 host = cfg.get('sge','host')
 port = cfg.getint('sge','port')
     
 def exec_qstat(username, password, jobID = None, qstat_username=None):
     ssh = paramiko.SSHClient()
-    ssh.load_host_keys("/home/user/workspace/frodo/hosts")
+    ssh.load_host_keys(common.hosts())
     ssh.connect(host, port, username, password)
     query = "qstat"
     if jobID:
@@ -44,7 +43,10 @@ def qstat_from_tmp_file(filename="tmp.txt"):
 
 def parse_qstat1(qstat):
     fields = qstat[:qstat.find("\n")].split()
-    ind = [fields.index('prior'), fields.index('slots')]
+    try:
+        ind = [fields.index('prior'), fields.index('slots')]
+    except ValueError:
+        return {'fields':fields, 'records':[]}
     ind.sort(reverse=True)
     for i in ind: fields.pop(i)
     records = pattern.findall(qstat)
