@@ -73,13 +73,16 @@ $(document).ready(function () {
 		<div class="btn-toolbar">
 			<div id='control-toolbal' class="btn-group">
 				<a id="refreshAnchor" class="btn btn-large" href="javascript:clickedRefresh()">
-					<i id="refreshIcon" class="icon-refresh" rel="tooltip" title="refresh once"></i>
+					<i id="refreshIcon" class="icon-refresh" rel="tooltip" title="refresh"></i>
 				</a>
 				<a id="playAnchor" class="btn btn-large btn-info" href="javascript:clickedPlay();">
 					<i id="playIcon" class="icon-play icon-white" rel="tooltip" title="start refresh loop"></i>
 				</a>
 				<a id="pauseAnchor" class="btn btn-large" href="javascript:clickedPause()">
 					<i id="pauseIcon" class="icon-pause" rel="tooltip" title="stop refresh loop"></i>
+				</a>
+				<a id="qstatJson" class="btn btn-large" href="/qstat/json" target="_blank">
+					<i id="qstatJsonIcon" class="icon-list-alt" rel="tooltip" title="full details in JSON"></i>
 				</a>
 				<a id="offAnchor" class="btn btn-large" href="/logout">
 					<i id="offIcon" class="icon-off" rel="tooltip" title="logout"></i>
@@ -116,7 +119,12 @@ $(document).ready(function () {
 		</div>
 		<div class="row-fluid">
 			{% if job %}
-			<h3>Job Info</h3>
+			<h3>
+				<a id="jobJson" class="btn btn-small" href="/qstat/jobID/{{ job['job_number'] }}/json" target="_blank">
+					<i id="jobJsonIcon" class="icon-list-alt" rel="tooltip" title="full details in JSON"></i>
+				</a>
+				Job Info 
+			</h3>
 			<table  class="table table-condensed">
 				<tr><td><strong>group</strong></td><td>{{ job['group'] }}</td></tr>
 				<tr><td><strong>queue</strong></td><td>{{ job['hard_queue_list'] }}</td></tr>
