@@ -44,13 +44,13 @@ To start using Frodo [v1]:
   - Get Frodo by one of the following ways:
     - Download Frodo v1 as a [zip file](https://github.com/yoavram/Frodo/archive/a88abf06efe808c74807fc0e5e39c51707f156d6.zip) to your server
     - Clone the repository to the server, and set the head to tag v1 (this option allows you to stay up-to-date using *git pull* commands):
-
+```
 	git clone https://github.com/yoavram/Frodo.git
 	git checkout v1
-
+```
   - Create a paramiko *hosts* file to allow paramiko to SSH to the SGE server (see the paramiko documentation on how to [save host keys to file](http://www.lag.net/paramiko/docs/paramiko.SSHClient-class.html#save_host_keys))
   - Create a configuration file *frodo.properties*, with the following sections and options:
-
+```
 	[sge]
 	# the following are used for SSHing the SGE server
 
@@ -70,7 +70,7 @@ To start using Frodo [v1]:
 	secret = OneRingToBringThemAllAndInTheDarknessBindThem
 	# True means that debug output is shown on the console and that any change to the files will cause the server to reload
 	development = True 
-
+```
   - Start the server by running *python web.py*
     - If you want to deploy using a different webserver read the [Flask documentation](http://flask.pocoo.org/docs/deploying/)
     - I use Apache with [mod_wsgi](http://flask.pocoo.org/docs/deploying/mod_wsgi/) and *frodo.wsgi* (in the root directory of the repository)
