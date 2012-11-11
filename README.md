@@ -50,13 +50,13 @@ To start using Frodo [v1]:
 ```
   - Create a paramiko *hosts* file to allow paramiko to SSH to the SGE server (see the paramiko documentation on how to [save host keys to file](http://www.lag.net/paramiko/docs/paramiko.SSHClient-class.html#save_host_keys))
   - Create a configuration file *frodo.properties*, with the following sections and options:
-```
+```python
 	[sge]
 	# the following are used for SSHing the SGE server
 
-	#SGE server SSH listening address
+	# SGE server SSH listening address
 	host = localhost
-	#SGE server SSH listening port
+	# SGE server SSH listening port
 	port = 22
 
 	[web]
