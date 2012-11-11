@@ -82,6 +82,14 @@ To start using Frodo [v1]:
   - Clicking the Refresh, Pause, Play and Logout buttons will refresh the page, pause automatic refreshing, resume automatic refreshing (every 15 mins, hardcoded in *qstat.html*), and logout your user
   - The time and date of the last refresh are shown at the top of the screen
 
+## ToDo
+
+  - Add some intuitive way to get to /qstat/username/<username>
+  - Error messages
+    - "error: [Errno 113] No route to host" thrown on ssh.connect() when the host is unavailable
+  - Flashing? see Flask docs
+  - Use AJAX/jQuery instead of refreshing
+
 ## Contact
 
 If you have any problems using Frodo or you wish to contribute to the code, please feel free to contact [yoavram](https://github.com/yoavram).
