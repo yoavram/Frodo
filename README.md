@@ -12,17 +12,17 @@ The output is displayed on a browser, saving the effort to connect to the cluste
 
   - The back end is written in Python 2.7.2
   - The front end is written with HTML+CSS+JavaScript
-  - The stable version is [tag v1](https://bitbucket.org/yoavram/frodo/src/355c5a593cfb/)
+  - The stable version is [v1]
 
 ## Requirements 
 
 Where filenames are given, they are included in the repository. Only Python packages must be manually installed on the server.
 
-  - [v0](https://bitbucket.org/yoavram/frodo/src/8e3c93faf600/):
+  - [v0](https://github.com/yoavram/Frodo/tree/d1acc74011adc5c648d357291f792c880c4313ca):
     - [paramiko](http://www.lag.net/paramiko/) as an SSH implementation
     - [Werkzeug](http://werkzeug.pocoo.org/) as a web application framework
     - [Jinja](http://jinja.pocoo.org/) as a templating engine
-  - [v1](https://bitbucket.org/yoavram/frodo/src/355c5a593cfb/):
+  - [v1]:
     - [paramiko](http://www.lag.net/paramiko/) as an SSH implementation
     - [Flask](http://flask.pocoo.org/) as a web application microframework, based on [Werkzeug](http://werkzeug.pocoo.org/) and [Jinja](http://jinja.pocoo.org/)
     - [Twitter Bootstrap](http://twitter.github.com/bootstrap) as a front end (JavaScript and CSS) framework, including:
@@ -35,14 +35,14 @@ Where filenames are given, they are included in the repository. Only Python pack
     - Frodo supports running behind an Apache webserver (instead of Flask's development webserver) using [mod_wsgi](http://flask.pocoo.org/docs/deploying/mod_wsgi/) - *frodo.wsgi*
 
 ## Installation
-To start using Frodo v1:
+To start using Frodo [v1]:
 
   - Use a computer with network access (via SSH) to the SGE cluster, and network access (via WWW or a proxy) to the potential clients
   - Check that you know how to connect to the SGE server via SSH with passwor authentication
   - Make sure you have installed Python - probably Python 2.7.x, but other versions may do the trick
   - Make sure you install the python requirements (see above)
   - Get Frodo by one of the following ways:
-    - Download Frodo v1 from the [downloads](https://bitbucket.org/yoavram/frodo/downloads) section (available in zip/gzip/bz2) to your server
+    - Download Frodo v1 as a [zip file](https://github.com/yoavram/Frodo/archive/a88abf06efe808c74807fc0e5e39c51707f156d6.zip) to your server
     - Clone the repository to the server, and set the head to tag v1 (this option allows you to stay up-to-date using *git pull* commands):
 
 	git clone https://github.com/yoavram/Frodo.git
@@ -93,3 +93,5 @@ If you have any problems using Frodo or you wish to contribute to the code, plea
 Frodo by Yoav Ram is licensed under a [Creative Commons Attribution-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-sa/3.0/).
 
 [![CC-BY-SA 3.0](http://i.creativecommons.org/l/by-sa/3.0/88x31.png)](http://creativecommons.org/licenses/by-sa/3.0/)
+
+[v1]: https://github.com/yoavram/Frodo/commit/a88abf06efe808c74807fc0e5e39c51707f156d6
