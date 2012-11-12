@@ -6,12 +6,14 @@ It displays the results of the *qstat* command, together with some summary stati
 
 The output is displayed on a browser, saving the effort to connect to the cluster head node via terminal, as well as providing the user with extra information and an automatic refresh.
 
+Screenshots: [Login](http://i.imgur.com/rlt6t.png), [qstat](http://i.imgur.com/LPAZY.png).
+
 ## Development 
 
 *Frodo* is still in development, but is considered semi-stable
 
   - The back end is written in Python 2.7.2
-  - The front end is written with HTML+CSS+JavaScript
+  - The front end is written with HTML + CSS + JavaScript
   - The stable version is [v1]
 
 ## Requirements 
