@@ -2,7 +2,7 @@
 
 Frodo is a web server that monitors an SGE ([Sun Grid Engine](http://en.wikipedia.org/wiki/Oracle_Grid_Engine), or as it is called now, Oracle Grid Engine) cluster by SSHing to it and running the [qstat](http://gridscheduler.sourceforge.net/htmlman/htmlman1/qstat.html) command on it.
 
-It displays the results of the *qstat* command, together with some summary statistics, to the user, and allows the user to get more information on specific jobs via the *qstat -j* and to get information on what other users are running using *qstat -u*.
+It displays the results of the `qstat` command, together with some summary statistics, to the user, and allows the user to get more information on specific jobs via the `qstat -j` and to get information on what other users are running using `qstat -u`.
 
 The output is displayed on a browser, saving the effort to connect to the cluster head node via terminal, as well as providing the user with extra information and an automatic refresh.
 
@@ -45,7 +45,7 @@ To start using Frodo [v1]:
   - Make sure you install the python requirements (see above)
   - Get Frodo by one of the following ways:
     - Download Frodo v1 as a [zip file](https://github.com/yoavram/Frodo/archive/a88abf06efe808c74807fc0e5e39c51707f156d6.zip) to your server
-    - Clone the repository to the server, and set the head to tag v1 (this option allows you to stay up-to-date using *git pull* commands):
+    - Clone the repository to the server, and set the head to tag v1 (this option allows you to stay up-to-date using `git pull` commands):
     
 ```bash
 	git clone https://github.com/yoavram/Frodo.git
@@ -77,14 +77,14 @@ To start using Frodo [v1]:
 	development = True 
 ```
 
-  - Start the server by running *python web.py*
+  - Start the server by running `python web.py`
     - If you want to deploy using a different webserver read the [Flask documentation](http://flask.pocoo.org/docs/deploying/)
     - I use Apache with [mod_wsgi](http://flask.pocoo.org/docs/deploying/mod_wsgi/) and *frodo.wsgi* (in the root directory of the repository)
   - Open your favorite browser and point it to the host and port you've given in the *[web]* section of the configuration file
   - Login with the username and password you use for the SGE cluster. Frodo **WILL NOT** save your username and password to file or send it anywhere. The credentials are kept in the [session](http://flask.pocoo.org/docs/quickstart/#sessions) variable of Flask and are only used to connect to the host you give in the *[sge]* section of the configuration file using SSH
   - Review jobs running on the cluster under your username 
   - Clicking on a job ID will bring to the left pane any arguments you have given when running the job (arguments must not be all-caps, all-caps arguments are ignored)
-  - Pointing the browser to */qstat/username/<username>*, replacing *<username>* with the username of some other user than yourself, will show that user's queue status (using *qstat -u <username>*)
+  - Pointing the browser to */qstat/username/<username>*, replacing *<username>* with the username of some other user than yourself, will show that user's queue status (using `qstat -u <username>`)
   - Clicking the Refresh, Pause, Play and Logout buttons will refresh the page, pause automatic refreshing, resume automatic refreshing (every 15 mins, hardcoded in *qstat.html*), and logout your user
   - The time and date of the last refresh are shown at the top of the screen
 
@@ -92,7 +92,7 @@ To start using Frodo [v1]:
 
   - Add some intuitive way to get to /qstat/username/<username>
   - Error messages
-    - "error: [Errno 113] No route to host" thrown on ssh.connect() when the host is unavailable
+    - `"error: [Errno 113] No route to host"` thrown on `ssh.connect()` when the host is unavailable
   - Flashing? see Flask docs
   - Use AJAX/jQuery instead of refreshing
 
