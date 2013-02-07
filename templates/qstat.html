@@ -3,6 +3,7 @@
 {% block head %}
 <script language="javascript" type="text/javascript" >
 <!--
+$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 var timer;
 
 function refresh() {
@@ -58,9 +59,18 @@ function activateBtn(btnName) {
 	i.removeClass().addClass(clz+" icon-white");
 }
 
+function getTableData() {
+	$.getJSON($SCRIPT_ROOT + '/qstat/json', fillTable);
+}
+
+function fillTable(data) {
+	alert(data['total']);
+}
+
 $(document).ready(function () {
 	$("[rel=tooltip]").tooltip();
-	timedRefresh();
+	//timedRefresh();
+	$('#refreshBtn').click(getTableData)
 });
 
 // -->
@@ -72,7 +82,7 @@ $(document).ready(function () {
 	<div class="span2 offset1">
 		<div class="btn-toolbar">
 			<div id='control-toolbal' class="btn-group">
-				<a id="refreshAnchor" class="btn btn-large" href="javascript:clickedRefresh()">
+				<a id="refreshBtn" class="btn btn-large">
 					<i id="refreshIcon" class="icon-refresh" rel="tooltip" title="refresh"></i>
 				</a>
 				<a id="playAnchor" class="btn btn-large btn-info" href="javascript:clickedPlay();">
