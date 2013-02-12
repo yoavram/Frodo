@@ -32,7 +32,7 @@ Where filenames are given, they are included in the repository. Only Python pack
       - Bootstrap Responsive plugin for mobile browsers - *bootstrap-responsive.min.css*
       - Bootstrap Tooltip plugin - *bootstrap-tooltip.js*
       - Glyphicons Halflings Free icons - *glyphicons-halflings.png* & *glyphicons-halflings-white.png*
-    - jQuery - *jquery-1.7.2.min.js*
+    - jQuery - *jquery-1.9.1.min.js*
     
     - Frodo supports running behind an Apache webserver (instead of Flask's development webserver) using [mod_wsgi](http://flask.pocoo.org/docs/deploying/mod_wsgi/) - *frodo.wsgi*
 
@@ -104,8 +104,9 @@ If you have any problems using Frodo or you wish to contribute to the code, plea
   - [My twitter](http://www.twitter.com/yoavram/)
 
 ## License
-Frodo by Yoav Ram is licensed under a [Creative Commons Attribution-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-sa/3.0/).
+Frodo by Yoav Ram is licensed under a [Creative Commons Attribution-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-nc-sa/3.0/). 
+Frodo could be available under a more permissive license for the right reason - please contact [Yoav](https://github.com/yoavram) if you want to discuss it.
 
-[![CC-BY-SA 3.0](http://i.creativecommons.org/l/by-sa/3.0/88x31.png)](http://creativecommons.org/licenses/by-sa/3.0/)
+[![CC-BY-NC-SA 3.0](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png)](http://creativecommons.org/licenses/by-nc-sa/3.0/)
 
 [v1]: https://github.com/yoavram/Frodo/commit/a88abf06efe808c74807fc0e5e39c51707f156d6
