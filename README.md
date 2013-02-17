@@ -6,53 +6,63 @@ It displays the results of the `qstat` command, together with some summary stati
 
 The output is displayed on a browser, saving the effort to connect to the cluster head node via terminal, as well as providing the user with extra information and an automatic refresh.
 
-Screenshots: [Login](http://i.imgur.com/rlt6t.png), [qstat](http://i.imgur.com/LPAZY.png).
+## Screenshots
+
+### Login
+[![Login](http://i.imgur.com/C4CcyIo.png)](http://i.imgur.com/C4CcyIo.png)
+
+### App
+[![qstat](http://i.imgur.com/h1MJNHq.png)](http://i.imgur.com/h1MJNHq.png)
 
 ## Development 
 
-*Frodo* is still in development, but is considered semi-stable
+*Frodo* is considered semi-stable. 
 
-  - The back end is written in Python 2.7.2
+I use it frequently and the only errors I get are when the cluster is unavailable.
+
+  - The back end is written in Python 2.7.3
   - The front end is written with HTML + CSS + JavaScript
   - The stable version is [v1]
 
-## Requirements 
+## Dependencies 
 
-Where filenames are given, they are included in the repository. Only Python packages must be manually installed on the server.
+Where filenames are given, they are included in the repository. 
+Only Python packages (marked with ^) must be manually installed on the server.
 
   - [v0](https://github.com/yoavram/Frodo/tree/d1acc74011adc5c648d357291f792c880c4313ca):
     - [paramiko](http://www.lag.net/paramiko/) as an SSH implementation
     - [Werkzeug](http://werkzeug.pocoo.org/) as a web application framework
     - [Jinja](http://jinja.pocoo.org/) as a templating engine
   - [v1]:
-    - [paramiko](http://www.lag.net/paramiko/) as an SSH implementation
-    - [Flask](http://flask.pocoo.org/) as a web application microframework, based on [Werkzeug](http://werkzeug.pocoo.org/) and [Jinja](http://jinja.pocoo.org/)
+    - [paramiko](http://www.lag.net/paramiko/)^ as an SSH implementation
+    - [Flask](http://flask.pocoo.org/)^ as a web application microframework, based on [Werkzeug](http://werkzeug.pocoo.org/) and [Jinja](http://jinja.pocoo.org/)
     - [Twitter Bootstrap](http://twitter.github.com/bootstrap) as a front end (JavaScript and CSS) framework, including:
       - Bootstrap core - *bootstrap.min.js* & *bootstrap.min.css*
       - Bootstrap Responsive plugin for mobile browsers - *bootstrap-responsive.min.css*
       - Bootstrap Tooltip plugin - *bootstrap-tooltip.js*
       - Glyphicons Halflings Free icons - *glyphicons-halflings.png* & *glyphicons-halflings-white.png*
-    - jQuery - *jquery-1.9.1.min.js*
+    - [jQuery](http://www.jquery.com/) - *jquery-1.9.1.min.js*
     
-    - Frodo supports running behind an Apache webserver (instead of Flask's development webserver) using [mod_wsgi](http://flask.pocoo.org/docs/deploying/mod_wsgi/) - *frodo.wsgi*
+Frodo can run behind an Apache webserver (instead of Flask's development webserver) using [mod_wsgi](http://flask.pocoo.org/docs/deploying/mod_wsgi/) - *frodo.wsgi*
 
 ## Installation
-To start using Frodo [v1]:
+To start using Frodo:
 
   - Use a computer with network access (via SSH) to the SGE cluster, and network access (via WWW or a proxy) to the potential clients
-  - Check that you know how to connect to the SGE server via SSH with passwor authentication
-  - Make sure you have installed Python - probably Python 2.7.x, but other versions may do the trick
-  - Make sure you install the python requirements (see above)
+  - Check that you know how to connect to the SGE server via SSH with password authentication
+  - Make sure you have installed Python - probably Python 2.7.x, but other versions might do the trick
+  - Install the python requirements: `pip install paramiko flask`
   - Get Frodo by one of the following ways:
     - Download Frodo v1 as a [zip file](https://github.com/yoavram/Frodo/archive/a88abf06efe808c74807fc0e5e39c51707f156d6.zip) to your server
     - Clone the repository to the server, and set the head to tag v1 (this option allows you to stay up-to-date using `git pull` commands):
     
 ```bash
 	git clone https://github.com/yoavram/Frodo.git
-	git checkout v1
 ```
 
-  - Create a paramiko *hosts* file to allow paramiko to SSH to the SGE server (see the paramiko documentation on how to [save host keys to file](http://www.lag.net/paramiko/docs/paramiko.SSHClient-class.html#save_host_keys))
+  - Create a paramiko *hosts* file to allow paramiko to SSH to the SGE server
+    - Either (see the paramiko documentation on how to [save host keys to file](http://www.lag.net/paramiko/docs/paramiko.SSHClient-class.html#save_host_keys))
+    - Or use the attached script: `python create_hosts_file.py`
   - Create a configuration file *frodo.properties*, with the following sections and options:
   
 ```python
@@ -87,6 +97,7 @@ To start using Frodo [v1]:
   - Pointing the browser to */qstat/username/<username>*, replacing *<username>* with the username of some other user than yourself, will show that user's queue status (using `qstat -u <username>`)
   - Clicking the Refresh, Pause, Play and Logout buttons will refresh the page, pause automatic refreshing, resume automatic refreshing (every 15 mins, hardcoded in *qstat.html*), and logout your user
   - The time and date of the last refresh are shown at the top of the screen
+  - The title of the page shows the total number of jobs
 
 ## ToDo
 
@@ -99,9 +110,6 @@ To start using Frodo [v1]:
 ## Contact
 
 If you have any problems using Frodo or you wish to contribute to the code, please feel free to contact [yoavram](https://github.com/yoavram).
-
-  - [My homepage](http://www.yoavram.com/)
-  - [My twitter](http://www.twitter.com/yoavram/)
 
 ## License
 Frodo by Yoav Ram is licensed under a [Creative Commons Attribution-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-nc-sa/3.0/). 
