@@ -107,9 +107,10 @@ To start using Frodo:
   - Flashing? see Flask docs
   - Use AJAX/jQuery instead of refreshing
 
-## Contact
+## Contact & Support
 
-If you have any problems using Frodo or you wish to contribute to the code, please feel free to contact [yoavram](https://github.com/yoavram).
+If you have any problems using Frodo please open an issue.
+If you wish to contribute to the code,feel free to contact [yoavram](https://github.com/yoavram) or just fork and pull-request.
 
 ## License
 Frodo by Yoav Ram is licensed under a [Creative Commons Attribution-ShareAlike 3.0 Unported License](http://creativecommons.org/licenses/by-nc-sa/3.0/). 
