@@ -22,7 +22,7 @@ I use it frequently and the only errors I get are when the cluster is unavailabl
 
   - The back end is written in Python 2.7.3
   - The front end is written with HTML + CSS + JavaScript
-  - The stable version is [v1]
+  - The stable version is v.1
 
 ## Dependencies 
 
