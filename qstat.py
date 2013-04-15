@@ -23,7 +23,11 @@ port = cfg.getint('sge','port')
 def exec_qstat(username, password, jobID = None, qstat_username=None):
     ssh = paramiko.SSHClient()
     ssh.load_host_keys(common.hosts())
-    ssh.connect(host, port, username, password)
+    try:
+        ssh.connect(host, port, username, password)
+    except paramiko.SSHException as e:
+        ssh.close()
+        return str(e)
     query = "qstat"
     if jobID:
         query += " -j " + str(jobID)
@@ -35,8 +39,7 @@ def exec_qstat(username, password, jobID = None, qstat_username=None):
     result = stdout.read()
     ssh.close()
     if err:
-        #TODO something here
-        print "*** ERROR:",err
+        return("Error: " + err)
     return result
 
 def qstat_from_tmp_file(filename="tmp.txt"):

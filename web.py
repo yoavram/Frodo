@@ -29,7 +29,10 @@ def qstat_html(jobID = None, qusername=None):
     username = session['username']
     password = session['password']
     now = time.asctime()
-    result = qstat.parse_qstat1(qstat.exec_qstat(username, password, qstat_username=qusername))
+    result = qstat.exec_qstat(username, password, qstat_username=qusername)
+    if result.startswith("Error"):
+        return render_template("error.html", msg=result)
+    result = qstat.parse_qstat1(result)
     fields = result['fields']
     records = result['records']
     summary = qstat.summarize1(fields,records)
