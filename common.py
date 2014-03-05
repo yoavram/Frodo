@@ -9,7 +9,10 @@ import ConfigParser
 
 def working_folder():
     #return os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-    return os.path.dirname(__file__)
+    folder = os.path.dirname(__file__)
+    if folder == '':
+        folder = '.'
+    return folder
 
 def configuration():
     folder = working_folder()
