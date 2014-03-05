@@ -6,6 +6,7 @@
 import paramiko
 import re
 import common
+import subprocess
 
 pattern = re.compile(r"^(?P<jobID>\d+)\s+(?P<prior>[\.\d]+)\s+(?P<name>\w+)\s+(?P<username>\w+)\s+(?P<state>\w+)\s+(?P<date>[\d\w\/]+)\s+(?P<time>[\d:]+)\s+(?P<queue>[@\w\.-]*)\s+(?P<slots>\d+)\s+(?P<jaTaskID>[\d\-:]*)$", re.M)
 ja_task_ID_pattern = re.compile(r'^(\d+)-(\d+):\d+$')
@@ -19,6 +20,21 @@ def smart_get_option(cfg, section, option):
 cfg = common.configuration()
 host = cfg.get('sge','host')
 port = cfg.getint('sge','port')
+
+def local_qstat(jobID = None, qstat_username=None):
+    query = ["qstat"]
+    if jobID:
+        query.append("-j")
+        query.append(str(jobID))
+    if qstat_username:
+        query.append("-u")
+        query.append(str(qstat_username))
+    #print "query:",query
+    try:
+        result = subprocess.check_output(query)    
+        return result
+    except subprocess.CalledProcessError as e:
+        return str(e)
     
 def exec_qstat(username, password, jobID = None, qstat_username=None):
     ssh = paramiko.SSHClient()
@@ -28,11 +44,11 @@ def exec_qstat(username, password, jobID = None, qstat_username=None):
     except paramiko.SSHException as e:
         ssh.close()
         return str(e)
-    query = "qstat"
+    query = "python ~/workspace/Frodo/qstat.py "
     if jobID:
-        query += " -j " + str(jobID)
-    if qstat_username:
-        query += " -u " + qstat_username
+        query += str(jobID)
+    elif qstat_username:
+        query += qstat_username
     #print "query:",query
     stdin, stdout, stderr = ssh.exec_command(query)
     err = stderr.read()
@@ -117,6 +133,15 @@ def qw_tasks(record):
         return 1
     
 if __name__ == '__main__':
+    import sys
+    if len(sys.argv) > 1:
+        additional = sys.argv[1]
+        if additional.isdigit():
+            print parse_qstat_jobID(local_qstat(jobID=additional))
+        else:
+            print parse_qstat1(local_qstat(qstat_username=additional))
+    else:        
+        print parse_qstat1(local_qstat())
     #records = parse_qstat2(qstat_from_tmp_file("tmp.txt"))
     #job = parse_qstat_jobID(qstat_from_tmp_file("tmp2.txt"))
-    pass
+    
