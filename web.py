@@ -32,12 +32,12 @@ def qstat_html(jobID = None, qusername=None):
     result = qstat.exec_qstat(username, password, qstat_username=qusername)
     if result.startswith("Error"):
         return render_template("error.html", msg=result)
-    result = eval(result)
+    result = qstat.parse_qstat1(result)
     fields = result['fields']
     records = result['records']
     summary = qstat.summarize1(fields,records)
     if jobID:
-        job_details = eval(qstat.exec_qstat(username, password, jobID=jobID))
+        job_details = qstat.parse_qstat_jobID(qstat.exec_qstat(username, password, jobID=jobID))
     else:
         job_details = None
     return render_template("qstat.html", username=username, time=now, summary=summary, fields=fields, records=records, job=job_details)
@@ -49,7 +49,7 @@ def qstat_json():
     username = session['username']
     password = session['password']
     now = time.asctime()
-    qstat_result = eval(qstat.exec_qstat(username, password))
+    qstat_result = qstat.parse_qstat1(qstat.exec_qstat(username, password))
     qstat_result.update(qstat.summarize1(qstat_result['fields'],qstat_result['records']))
     qstat_result['time'] = now
     return jsonify(**qstat_result)
@@ -61,7 +61,7 @@ def qstat_job_json(jobID):
     username = session['username']
     password = session['password']
     now = time.asctime()
-    qstat_result = eval(qstat.exec_qstat(username, password, jobID=jobID))
+    qstat_result = qstat.parse_qstat_jobID(qstat.exec_qstat(username, password, jobID=jobID))
     qstat_result['time'] = now
     return jsonify(**qstat_result)
 
