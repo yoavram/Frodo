@@ -44,7 +44,7 @@ def exec_qstat(username, password, jobID = None, qstat_username=None):
     ssh.close()
     if err:
         return("Error: " + err)
-    return result
+    return result.decode()
 
 def qstat_from_tmp_file(filename="tmp.txt"):
     fin = open(filename)
