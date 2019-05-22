@@ -3,6 +3,10 @@
 # Copyright (c) 2012 by Yoav Ram.
 # This work is licensed under the Creative Commons Attribution-ShareAlike 3.0 Unported License.
 # To view a copy of this license, visit http://creativecommons.org/licenses/by-sa/3.0/.
+from builtins import str
+from builtins import map
+from builtins import zip
+from builtins import range
 import paramiko
 import re
 import common
@@ -67,13 +71,13 @@ def parse_qstat2(qstat):
     return records_to_dict(fields, records)
 
 def records_to_dict(fields,records):
-    return [dict(zip(fields,records[i])) for i in range(len(records))]
+    return [dict(list(zip(fields,records[i]))) for i in range(len(records))]
 
 def parse_qstat_jobID(qstat):
     qstat = qstat[qstat.find('\n')+1:]
-    records = [map(str.strip, x.split(':',1)) for x in qstat.split('\n')]
+    records = [list(map(str.strip, x.split(':',1))) for x in qstat.split('\n')]
     if len(records)>0:
-        records = map(tuple, records)[:-1]
+        records = list(map(tuple, records))[:-1]
         records = messy_tuples_to_dict(records)
     return records
 
@@ -101,8 +105,8 @@ def summarize1(fields,records):
     return summarize2(records)
 
 def summarize2(records):
-    r = len(filter(lambda x: x['state'] == 'r', records))
-    qws = filter(lambda x: x['state'] == 'qw', records)
+    r = len([x for x in records if x['state'] == 'r'])
+    qws = [x for x in records if x['state'] == 'qw']
     qw = sum( map(qw_tasks, qws) )
     return {'r':r,'qw':qw, 'total':r+qw}
 
